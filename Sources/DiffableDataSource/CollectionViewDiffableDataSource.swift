@@ -6,7 +6,9 @@ open class CollectionViewDiffableDataSource<Section, Item>:
 {
     // MARK: Properties
 
-    private weak var collectionView: UICollectionView?
+    public private(set) weak var collectionView: UICollectionView?
+    public private(set) var sections: [Section] = []
+
     private let cellProvider: CellProvider
     private let cellConfigurer: CellConfigurer
 
@@ -31,6 +33,9 @@ open class CollectionViewDiffableDataSource<Section, Item>:
             cellConfigurer(collectionView, indexPath, wrappedItem.value, cell)
             return cell
         }
+
+        // For some reason, this class defaults to one section with zero items, so let's clear them out.
+        self.apply(sections: self.sections)
     }
 
     // MARK: Interface
@@ -59,6 +64,9 @@ open class CollectionViewDiffableDataSource<Section, Item>:
                 }
             }
         }
+
+        // Save a reference to the sections:
+        self.sections = sections
 
         // Determine if we should animate the differences or not:
         if self.isCollectionViewSetAndAttachedToWindow {
