@@ -1,12 +1,12 @@
 import DiffableDataSource
 import UIKit
 
-final class TableViewController: UITableViewController {
+final class CollectionViewController: UICollectionViewController {
 
     // MARK: Properties
 
     private static let reuseIdentifier = "Cell"
-    private var dataSource: TableViewDiffableDataSource<Section, Item>!
+    private var dataSource: CollectionViewDiffableDataSource<Section, Item>!
     private var items: [Item] = [
         Item(id: "1", ticker: "AAPL", marketCap: 2.125),
         Item(id: "2", ticker: "MSFT", marketCap: 1.942),
@@ -18,17 +18,25 @@ final class TableViewController: UITableViewController {
     // MARK: Initialization
 
     init() {
-        super.init(style: .plain)
+
+        // Create the collection view layout:
+        let size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(96))
+        let item = NSCollectionLayoutItem(layoutSize: size)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: size, subitem: item, count: 1)
+        let section = NSCollectionLayoutSection(group: group)
+        let collectionViewLayout = UICollectionViewCompositionalLayout(section: section)
+
+        super.init(collectionViewLayout: collectionViewLayout)
 
         // Configure the table view and data source:
-        self.tableView.register(ItemTableViewCell.self, forCellReuseIdentifier: Self.reuseIdentifier)
-        self.dataSource = TableViewDiffableDataSource<Section, Item>(
-            tableView: self.tableView,
-            cellProvider: { tableView, indexPath, _ in
-                return tableView.dequeueReusableCell(withIdentifier: Self.reuseIdentifier, for: indexPath)
+        self.collectionView.register(ItemCollectionViewCell.self, forCellWithReuseIdentifier: Self.reuseIdentifier)
+        self.dataSource = CollectionViewDiffableDataSource<Section, Item>(
+            collectionView: self.collectionView,
+            cellProvider: { collectionView, indexPath, _ in
+                return collectionView.dequeueReusableCell(withReuseIdentifier: Self.reuseIdentifier, for: indexPath)
             },
-            cellConfigurer: { tableView, indexPath, item, cell in
-                guard let cell = cell as? ItemTableViewCell else { return }
+            cellConfigurer: { collectionView, indexPath, item, cell in
+                guard let cell = cell as? ItemCollectionViewCell else { return }
                 cell.configure(for: item)
             }
         )
@@ -41,7 +49,7 @@ final class TableViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func configureTableViewAndDataSource() {
+    private func configureCollectionViewAndDataSource() {
 
     }
 
@@ -49,6 +57,9 @@ final class TableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // Configure the collection view:
+        self.collectionView.backgroundColor = .white
 
         // Simulate receiving new stock data every second:
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in

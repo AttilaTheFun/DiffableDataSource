@@ -17,9 +17,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
+        // Create the root view controller:
+        let rootViewController = CollectionViewController()
+//        let rootViewController = TableViewController()
+
         // Setup the window:
         let window = UIWindow(frame: UIScreen.main.bounds)
-        window.rootViewController = TableViewController(style: .plain)
+        window.rootViewController = rootViewController
         window.windowScene = windowScene
         self.window = window
         self.window?.makeKeyAndVisible()
