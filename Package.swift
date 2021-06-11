@@ -21,7 +21,10 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "DiffableDataSource",
-            dependencies: []),
+            dependencies: [],
+            path: "Sources",
+            exclude: ["DiffableDataSourceDemo"]
+        ),
         .testTarget(
             name: "DiffableDataSourceTests",
             dependencies: ["DiffableDataSource"]),

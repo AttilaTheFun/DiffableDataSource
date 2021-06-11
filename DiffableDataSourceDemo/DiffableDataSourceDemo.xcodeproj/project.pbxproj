@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,6 +13,7 @@
 		023A00CE26740DD700F809EB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 023A00CC26740DD700F809EB /* Main.storyboard */; };
 		023A00D026740DD800F809EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 023A00CF26740DD800F809EB /* Assets.xcassets */; };
 		023A00D326740DD800F809EB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 023A00D126740DD800F809EB /* LaunchScreen.storyboard */; };
+		023A00DC26740F2200F809EB /* DiffableDataSource in Frameworks */ = {isa = PBXBuildFile; productRef = 023A00DB26740F2200F809EB /* DiffableDataSource */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				023A00DC26740F2200F809EB /* DiffableDataSource in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +85,9 @@
 			dependencies = (
 			);
 			name = DiffableDataSourceDemo;
+			packageProductDependencies = (
+				023A00DB26740F2200F809EB /* DiffableDataSource */,
+			);
 			productName = DiffableDataSourceDemo;
 			productReference = 023A00C326740DD700F809EB /* DiffableDataSourceDemo.app */;
 			productType = "com.apple.product-type.application";
@@ -110,6 +115,9 @@
 				Base,
 			);
 			mainGroup = 023A00BA26740DD700F809EB;
+			packageReferences = (
+				023A00DA26740F2200F809EB /* XCRemoteSwiftPackageReference "DiffableDataSource" */,
+			);
 			productRefGroup = 023A00C426740DD700F809EB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -341,6 +349,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		023A00DA26740F2200F809EB /* XCRemoteSwiftPackageReference "DiffableDataSource" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AttilaTheFun/DiffableDataSource";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		023A00DB26740F2200F809EB /* DiffableDataSource */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 023A00DA26740F2200F809EB /* XCRemoteSwiftPackageReference "DiffableDataSource" */;
+			productName = DiffableDataSource;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 023A00BB26740DD700F809EB /* Project object */;
 }

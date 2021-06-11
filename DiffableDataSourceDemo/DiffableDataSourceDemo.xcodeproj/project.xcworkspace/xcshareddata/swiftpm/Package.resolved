@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "DiffableDataSource",
+        "repositoryURL": "https://github.com/AttilaTheFun/DiffableDataSource",
+        "state": {
+          "branch": "main",
+          "revision": "94795a48aca435d118fdba145a8e36ec7a5231ff",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
