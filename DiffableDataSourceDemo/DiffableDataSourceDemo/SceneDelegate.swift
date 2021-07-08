@@ -18,8 +18,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
         // Create the root view controller:
-        let rootViewController = CollectionViewController()
-//        let rootViewController = TableViewController()
+//        let rootViewController = CollectionViewController()
+        let rootViewController = TableViewController()
 
         // Setup the window:
         let window = UIWindow(frame: UIScreen.main.bounds)

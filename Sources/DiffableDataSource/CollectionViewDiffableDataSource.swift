@@ -52,17 +52,6 @@ open class CollectionViewDiffableDataSource<Section, Item>:
         for sectionIdentifier in sectionIdentifiers {
             let itemIdentifiers = sectionIdentifier.value.items.map { DiffableWrapper(value: $0) }
             newSnapshot.appendItems(itemIdentifiers, toSection: sectionIdentifier)
-
-            // Re-configure cells for the item identifiers if they exist:
-            for itemIdentifier in itemIdentifiers {
-                if
-                    let indexPath = self.indexPath(for: itemIdentifier),
-                    let collectionView = self.collectionView,
-                    let cell = collectionView.cellForItem(at: indexPath)
-                {
-                    self.cellConfigurer(collectionView, indexPath, itemIdentifier.value, cell)
-                }
-            }
         }
 
         // Save a reference to the sections:
@@ -70,6 +59,23 @@ open class CollectionViewDiffableDataSource<Section, Item>:
 
         // Determine if we should animate the differences or not:
         if self.isCollectionViewSetAndAttachedToWindow {
+
+            // Re-configure cells for the item identifiers if they exist.
+            // NOTE: If the collectionView is not set and attached to the window, cell for row forces an early layout.
+            // The call without animating differences below is the same as calling reload data so this is unnecessary.
+            for sectionIdentifier in sectionIdentifiers {
+                let itemIdentifiers = sectionIdentifier.value.items.map { DiffableWrapper(value: $0) }
+                for itemIdentifier in itemIdentifiers {
+                    if
+                        let indexPath = self.indexPath(for: itemIdentifier),
+                        let collectionView = self.collectionView,
+                        let cell = collectionView.cellForItem(at: indexPath)
+                    {
+                        self.cellConfigurer(collectionView, indexPath, itemIdentifier.value, cell)
+                    }
+                }
+            }
+
             self.apply(newSnapshot, animatingDifferences: animatingDifferences, completion: nil)
         } else {
             self.apply(newSnapshot, animatingDifferences: false, completion: nil)
