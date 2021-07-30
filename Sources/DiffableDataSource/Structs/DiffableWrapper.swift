@@ -4,9 +4,9 @@
  This wrapper type allows us to pluck the identity value from a diffable type and implement Hashable with only the ID.
  */
 public struct DiffableWrapper<Value> where Value: DiffableType {
-    let value: Value
+    public let value: Value
 
-    init(value: Value) {
+    public init(value: Value) {
         self.value = value
     }
 }
