@@ -31,7 +31,7 @@ final class CollectionViewController: UICollectionViewController {
         // Configure the table view and data source:
         self.collectionView.register(ItemCollectionViewCell.self, forCellWithReuseIdentifier: Self.reuseIdentifier)
         self.dataSource = CollectionViewDiffableDataSource<Section, Item>(
-            collectionView: self.collectionView,
+            view: self.collectionView,
             cellProvider: { collectionView, indexPath, _ in
                 return collectionView.dequeueReusableCell(withReuseIdentifier: Self.reuseIdentifier, for: indexPath)
             },

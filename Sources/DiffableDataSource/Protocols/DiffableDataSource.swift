@@ -61,7 +61,7 @@ extension DiffableDataSource {
         completion: (() -> Void)? = nil)
     {
         // Save a reference to the old snapshot:
-//        let oldSnapshot = self.snapshot()
+        let oldSnapshot = self.snapshot()
 
         // Construct the new snapshot:
         var newSnapshot = NSDiffableDataSourceSnapshot<DiffableWrapper<Section>, DiffableWrapper<Section.Item>>()
@@ -78,25 +78,39 @@ extension DiffableDataSource {
         // Determine if we should animate the differences or not:
         if self.isViewSetAndAttachedToWindow {
 
-            // TODO: Verify if cells are re-configured if they change indices.
-            // I suspect I only need reconfigure cells where the same identifier stays at the same index path.
+            // Re-configure the visible cells from the old snapshot if they exist in the new snapshot.
+            // NOTE: This means we could potentially do extra work to configure a cell
+            // that gets re-configured due to the updated cell shifting off screen, but this isn't a big deal.
+            for (oldSectionIndex, oldSectionIdentifier) in oldSnapshot.sectionIdentifiers.enumerated() {
+                let oldItemIdentifiers = oldSectionIdentifier.value.items.map { DiffableWrapper(value: $0) }
+                for (oldItemIndex, oldItemIdentifier) in oldItemIdentifiers.enumerated() {
+                    let oldIndexPath = IndexPath(item: oldItemIndex, section: oldSectionIndex)
+                    guard
+                        let view = self.view,
+                        let oldCell = view.cellForItem(at: oldIndexPath) else
+                    {
+                        print("Not re-configuring cell with id: \(oldItemIdentifier.value.id) because cell was not visible")
+                        continue
+                    }
 
-//            // Re-configure cells for the item identifiers if they exist.
-//
-//            // NOTE: If the collectionView is not set and attached to the window, cell for row forces an early layout.
-//            // The call without animating differences below is the same as calling reload data so this is unnecessary.
-//            for sectionIdentifier in sectionIdentifiers {
-//                let itemIdentifiers = sectionIdentifier.value.items.map { DiffableWrapper(value: $0) }
-//                for itemIdentifier in itemIdentifiers {
-//                    if
-//                        let indexPath = self.indexPath(for: itemIdentifier),
-//                        let view = self.view,
-//                        let cell = view.cellForItem(at: indexPath)
-//                    {
-//                        self.cellConfigurer(collectionView, indexPath, itemIdentifier.value, cell)
-//                    }
-//                }
-//            }
+                    guard
+                        let newSectionIdentifier = newSnapshot.sectionIdentifier(containingItem: oldItemIdentifier),
+                        let newSectionIndex = newSnapshot.indexOfSection(newSectionIdentifier),
+                        let newItemIndex = newSnapshot.indexOfItem(oldItemIdentifier) else
+                    {
+                        print("Not re-configuring cell with id: \(oldItemIdentifier.value.id) because new item was not present")
+                        continue
+                    }
+
+                    let newItemIdentifier = newSnapshot.itemIdentifiers(inSection: newSectionIdentifier)[newItemIndex]
+                    let newIndexPath = IndexPath(item: newItemIndex, section: newSectionIndex)
+
+                    print("Re-configuring cell with id: \(newItemIdentifier.value.id) with old index path: \(oldIndexPath), new index path: \(newIndexPath)")
+
+                    // Re-configure the cell:
+                    self.cellConfigurer(view, oldIndexPath, oldItemIdentifier.value, oldCell)
+                }
+            }
 
             self.apply(newSnapshot, animatingDifferences: animatingDifferences, completion: nil)
         } else {
