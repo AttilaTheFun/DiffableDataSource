@@ -89,16 +89,22 @@ extension DiffableDataSource {
                         let view = self.view,
                         let oldCell = view.cellForItem(at: oldIndexPath) else
                     {
-//                        print("Not re-configuring cell with id: \(oldItemIdentifier.value.id) because the old cell was not visible")
+//                        print("Not re-configuring item with id: \(oldItemIdentifier.value.id) because the old cell was not visible")
                         continue
                     }
 
-                    guard
-                        let newSectionIdentifier = newSnapshot.sectionIdentifier(containingItem: oldItemIdentifier),
-                        let newSectionIndex = newSnapshot.indexOfSection(newSectionIdentifier),
-                        let newItemIndex = newSnapshot.indexOfItem(oldItemIdentifier) else
+                    guard let newSectionIndex = newSnapshot.sectionIdentifiers
+                        .firstIndex(where: { $0.value.id == oldSectionIdentifier.value.id }) else
                     {
-//                        print("Not re-configuring cell with id: \(oldItemIdentifier.value.id) because the item was not present in the new snapshot")
+//                        print("Not re-configuring item with id: \(oldItemIdentifier.value.id) because the old section id was not present in the new snapshot")
+                        continue
+                    }
+
+                    let newSectionIdentifier = newSnapshot.sectionIdentifiers[newSectionIndex]
+                    guard let newItemIndex = newSnapshot.itemIdentifiers(inSection: newSectionIdentifier)
+                        .firstIndex(where: { $0.value.id == oldItemIdentifier.value.id}) else
+                    {
+//                        print("Not re-configuring item with id: \(oldItemIdentifier.value.id) because the old item id was not present in the new snapshot")
                         continue
                     }
 
@@ -108,7 +114,7 @@ extension DiffableDataSource {
                         continue
                     }
 
-                    let newIndexPath = IndexPath(item: newItemIndex, section: newSectionIndex)
+//                    let newIndexPath = IndexPath(item: newItemIndex, section: newSectionIndex)
 //                    print("Re-configuring cell with id: \(newItemIdentifier.value.id) with old index path: \(oldIndexPath), new index path: \(newIndexPath)")
 
                     // Re-configure the cell:
