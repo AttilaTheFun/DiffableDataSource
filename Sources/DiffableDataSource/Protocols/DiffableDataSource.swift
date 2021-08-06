@@ -117,8 +117,8 @@ extension DiffableDataSource {
 //                    let newIndexPath = IndexPath(item: newItemIndex, section: newSectionIndex)
 //                    print("Re-configuring cell with id: \(newItemIdentifier.value.id) with old index path: \(oldIndexPath), new index path: \(newIndexPath)")
 
-                    // Re-configure the cell:
-                    self.cellConfigurer(view, oldIndexPath, oldItemIdentifier.value, oldCell)
+                    // Re-configure the old cell with the new value:
+                    self.cellConfigurer(view, oldIndexPath, newItemIdentifier.value, oldCell)
                 }
             }
 
